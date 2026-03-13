@@ -19,6 +19,9 @@ const getStorage = () => {
 
 const AsyncStorage: AsyncStorageLike = {
   async getItem(key) {
+    if (memoryStore.has(key)) {
+      return memoryStore.get(key) ?? null;
+    }
     const storage = getStorage();
     if (storage) {
       try {
@@ -34,6 +37,7 @@ const AsyncStorage: AsyncStorageLike = {
     if (storage) {
       try {
         storage.setItem(key, value);
+        memoryStore.set(key, value);
         return;
       } catch {
         // Fall through to memory store
@@ -42,6 +46,7 @@ const AsyncStorage: AsyncStorageLike = {
     memoryStore.set(key, value);
   },
   async removeItem(key) {
+    memoryStore.delete(key);
     const storage = getStorage();
     if (storage) {
       try {
@@ -51,7 +56,6 @@ const AsyncStorage: AsyncStorageLike = {
         // Fall through to memory store
       }
     }
-    memoryStore.delete(key);
   },
 };
 
