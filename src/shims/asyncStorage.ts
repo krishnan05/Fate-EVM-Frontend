@@ -37,7 +37,6 @@ const AsyncStorage: AsyncStorageLike = {
     if (storage) {
       try {
         storage.setItem(key, value);
-        memoryStore.set(key, value);
         return;
       } catch {
         // Fall through to memory store
